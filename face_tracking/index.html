@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Live Webcam Stream with Facial Tracking</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #webcam-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #webcam, #facial-landmarks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js'></script>
+</head>
+<body>
+    <div id='webcam-container'>
+        <video id='webcam' autoplay playsinline></video>
+        <canvas id='facial-landmarks'></canvas>
+    </div>
+    <script>
+        console.log('🔧 Waiting for face-api to load...');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            if (typeof faceapi !== 'undefined') {
+                console.log('✅ face-api loaded successfully.');
+                const script = document.createElement('script');
+                script.src = 'app.js';
+                document.body.appendChild(script);
+            } else {
+                console.error('❌ face-api failed to load.');
+            }
+        });
+    </script>
+</body>
+</html>
