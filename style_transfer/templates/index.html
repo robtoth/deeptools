@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Neural Style Transfer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #result img {
+            max-width: 100%;
+            height: auto;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .image-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Neural Style Transfer</h1>
+    <form id='styleTransferForm' enctype='multipart/form-data'>
+        <label for='contentInput'>Content Image:</label>
+        <input type='file' id='contentInput' name='content' accept='image/*' required>
+        <br><br>
+        <label for='styleInput'>Style Image:</label>
+        <input type='file' id='styleInput' name='style' accept='image/*' required>
+        <br><br>
+        <button type='submit'>Transfer Style</button>
+    </form>
+    <div id='loading'>Processing... This may take a few minutes.</div>
+    <div id='result'></div>
+
+    <script>
+        const imageNames = ['User Style', 'Starry Night', 'The Scream', 'The Persistence of Memory', 'The Great Wave off Kanagawa', 'Girl with a Pearl Earring'];
+
+        document.getElementById('styleTransferForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('🖱️ Form submitted...');
+            
+            const formData = new FormData(e.target);
+            console.log('📁 Form data created...');
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').innerHTML = '';
+            
+            console.log('🌐 Fetching data from /api/style_transfer...');
+            try {
+                const response = await fetch('/api/style_transfer', {
+                    method: 'POST',
+                    body: formData
+                });
+                console.log('✅ Fetch completed.');
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    console.log('📦 Received image blob.');
+                    
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(blob);
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const imageWidth = this.width / 6;
+                        const imageHeight = this.height;
+                        
+                        for (let i = 0; i < 6; i++) {
+                            canvas.width = imageWidth;
+                            canvas.height = imageHeight;
+                            ctx.drawImage(this, i * imageWidth, 0, imageWidth, imageHeight, 0, 0, imageWidth, imageHeight);
+                            
+                            const container = document.createElement('div');
+                            container.className = 'image-container';
+                            
+                            const singleImg = document.createElement('img');
+                            singleImg.src = canvas.toDataURL();
+                            
+                            const caption = document.createElement('p');
+                            caption.textContent = imageNames[i];
+                            
+                            container.appendChild(singleImg);
+                            container.appendChild(caption);
+                            document.getElementById('result').appendChild(container);
+                        }
+                    };
+                    console.log('🖼️ Updated result images on page.');
+                } else {
+                    console.error('❌ Error:', response.statusText);
+                    document.getElementById('result').textContent = 'Error: ' + response.statusText;
+                }
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
