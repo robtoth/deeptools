@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style Transfer App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1, h2 { text-align: center; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        img { max-width: 100%; height: auto; }
+        #result { display: none; }
+        .output-container { display: flex; flex-wrap: wrap; justify-content: space-around; }
+        .output-item { width: 45%; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Style Transfer App</h1>
+    <form id="uploadForm">
+        <label for="content">Content Image:</label>
+        <input type="file" id="content" name="content" accept="image/*" required>
+        
+        <label for="style">Your Style Image:</label>
+        <input type="file" id="style" name="style" accept="image/*" required>
+        
+        <button type="submit">Run Style Transfer</button>
+    </form>
+    
+    <div id="result">
+        <h2>Results:</h2>
+        <div id="outputContainer" class="output-container"></div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/api/style_transfer', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Style transfer failed');
+                }
+                
+                const data = await response.json();
+                const container = document.getElementById('outputContainer');
+                container.innerHTML = '';
+                data.outputs.forEach((output, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'output-item';
+                    const img = document.createElement('img');
+                    img.src = `/outputs/${output}`;
+                    img.alt = `Style Transfer Result ${index + 1}`;
+                    div.appendChild(img);
+                    container.appendChild(div);
+                });
+                document.getElementById('result').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during style transfer');
+            }
+        });
+    </script>
+</body>
+</html>
