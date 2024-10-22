@@ -1,0 +1,6 @@
+Flask[async]
+openai
+requests
+pyyaml
+Flask-CORS
+aiohttp

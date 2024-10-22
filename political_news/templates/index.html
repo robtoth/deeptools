@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Political News and Questions</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+            flex-wrap: wrap;
+        }
+        .column {
+            flex: 1 1 30%;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .left {
+            background-color: #f0f0f0;
+        }
+        .right {
+            background-color: #e0e0e0;
+        }
+        .center {
+            background-color: #d0d0d0;
+        }
+        h2, h3 {
+            margin-bottom: 20px;
+        }
+        .qa-pair {
+            margin-bottom: 20px;
+        }
+        .question {
+            font-weight: bold;
+        }
+        .answer {
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+        .loading {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="column left">
+            <h2>Today's Political News</h2>
+            <p id="news-content">Loading news...</p>
+            <h3>Liberal Perspective Questions and Answers:</h3>
+            <div id="liberal-qa"></div>
+        </div>
+        <div class="column right">
+            <h2>Today's Political News</h2>
+            <p id="news-content-right">Loading news...</p>
+            <h3>Conservative Perspective Questions and Answers:</h3>
+            <div id="conservative-qa"></div>
+        </div>
+        <div class="column center">
+            <h2>Final Summary</h2>
+            <p id="final-summary">Generating final summary...</p>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
