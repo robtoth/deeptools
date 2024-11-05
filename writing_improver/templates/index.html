@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer's Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="scroll-container">
+        <div class="container">
+            <div class="column">
+                <h2>Original Text</h2>
+                <textarea id="original-text" placeholder="Begin your masterpiece here..."></textarea>
+                <button onclick="processText()">Transform Text</button>
+                <div id="loading" class="loading">
+                    Crafting your words...
+                    <div class="progress-bar">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <h2>Condensed Version</h2>
+                <textarea id="condensed-text" readonly></textarea>
+            </div>
+            <div class="column">
+                <h2>Reorganized Version</h2>
+                <textarea id="reorganized-text" readonly></textarea>
+            </div>
+            <div class="column">
+                <h2>Critique</h2>
+                <textarea id="critique-text" readonly></textarea>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='endpoints.js') }}"></script>
+</body>
+</html>
+

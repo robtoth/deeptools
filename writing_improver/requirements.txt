@@ -1,0 +1,6 @@
+flask
+pyyaml
+python-dotenv
+openai
+nltk
+tqdm
